@@ -7,8 +7,8 @@ webserver:
 mail:
   server: "localhost"
   port: "25"
-  recipient: "welsh@madcaplaughs.co.uk"
-  sender: alerting@tinfoilcipher.co.uk
+  recipient: "andy@tinfoilcipher.co.uk"
+  sender: "alerting@tinfoilcipher.co.uk"
 
 ip:
   enabled: true

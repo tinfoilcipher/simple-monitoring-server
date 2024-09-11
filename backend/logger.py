@@ -35,5 +35,7 @@ def log_writer(logline):
     #--Catch all offlines as ERRORs
     if "online" not in logline:
         logger.error(logline)
+    elif "Raising Alert" in logline:
+        logger.warning(logline)
     else:
         logger.info(logline)

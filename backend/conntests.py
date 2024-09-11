@@ -3,7 +3,7 @@ from sys import stdout
 from contextlib import redirect_stdout
 from requests import get, exceptions
 from time import sleep
-from logwriter import log_writer
+from logger import log_writer
 from alerter import email_alerter
 
 #--Ping Testing
@@ -74,6 +74,7 @@ def connection_tester(polling_interval,
                 alerts.append(error)
 
         if not len(alerts) == 0:
+            log_writer(f"Raising Email Alert")
             email_alerter(alerts, mailer_config)
 
         sleep(polling_interval)
