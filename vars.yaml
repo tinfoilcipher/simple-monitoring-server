@@ -1,0 +1,69 @@
+polling_interval: 30  #--Seconds
+
+webserver:
+  ip: 0.0.0.0
+  port: 8080
+
+mail:
+  server: "localhost"
+  port: "25"
+  recipient: "welsh@madcaplaughs.co.uk"
+  sender: alerting@tinfoilcipher.co.uk
+
+ip:
+  enabled: true
+  prefix: "192.168.1."
+  hosts:
+    mcfw: 
+      hostname: "mcfw"
+      ip_host: "1"
+    mc-file:
+      hostname: "mc-file"
+      ip_host: "2"
+    mcnas:
+      hostname: "mcnas"
+      ip_host: "3"
+    mcsw01:
+      hostname: "mcsw01"
+      ip_host: "4"
+    mcsw02:
+      hostname: "mcsw02"
+      ip_host: "5"
+    mc-camera01:
+      hostname: mc-camera01
+      ip_host: "16"
+    mck8s-control01:
+      hostname: "mck8s-control01"
+      ip_host: "200"
+    mck8s-worker01:
+      hostname: "mck8s-worker01"
+      ip_host: "210"
+    mck8s-worker02:
+      hostname: "mck8s-worker02"
+      ip_host: "211"
+    mck8s-worker03:
+      hostname: "mck8s-worker03"
+      ip_host: "212"
+    mc-host:
+      hostname: "mc-host"
+      ip_host: "254"
+
+http:
+  enabled: true
+  domain: "madcaplaughs.co.uk"
+  hosts:
+    kubernetes:
+      hostname: "kubernetes"
+      endpoint: "/"
+    frigate:
+      hostname: "frigate"
+      endpoint: "/"
+    unifi:
+      hostname: "unifi"
+      endpoint: "/"
+    deluge:
+      hostname: "deluge"
+      endpoint: "/"
+    kodi-backend:
+      hostname: "kodi-backend"
+      endpoint: "/"
