@@ -3,7 +3,7 @@ from sys import stdout
 from contextlib import redirect_stdout
 from requests import get, exceptions
 from time import sleep
-from logwriter import log_writer
+from logger import log_writer
 from alerter import email_alerter
 
 #--Ping Testing
@@ -37,9 +37,9 @@ def http_test(hostname,
         except exceptions.ConnectionError:
             return hostname + "." + domain + " returned a connection error: " + str(response.status_code)
         except exceptions.Timeout:
-            return hostname + "." + domain + " returned a timeout: " + str(response.status_code)
+            return hostname + "." + domain + " returned a timeout error: " + str(response.status_code)
         except exceptions.RequestException:
-            return "OH NO! " + hostname + "." + domain + " is broken in some inexplicable way: " + str(response.status_code)
+            return "OH NO! " + hostname + "." + domain + " has an unclear HTTP error, solar flares?: " + str(response.status_code)
 
 #--Wraps the above two functions, shouldn't this whole thing be a class?
 #def connection_tester(polling_interval, ip_hosts, ip_prefix, ip_enabled, http_hosts, http_domain, http_enabled):
@@ -74,6 +74,7 @@ def connection_tester(polling_interval,
                 alerts.append(error)
 
         if not len(alerts) == 0:
+            log_writer(f"Raising Email Alert")
             email_alerter(alerts, mailer_config)
 
         sleep(polling_interval)

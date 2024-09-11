@@ -33,7 +33,11 @@ def log_builder():
 def log_writer(logline):
     logger = log_builder()
     #--Catch all offlines as ERRORs
-    if "online" not in logline:
+    if "offline" in logline:
         logger.error(logline)
+    elif "error" in logline:
+        logger.error(logline)
+    elif "Email Alert" in logline:
+        logger.warning(logline)
     else:
         logger.info(logline)
