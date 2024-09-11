@@ -1,4 +1,3 @@
-import os
 from yaml import safe_load
 from threading import Thread
 from conntests import connection_tester
