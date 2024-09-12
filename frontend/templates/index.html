@@ -1,0 +1,20 @@
+<html>
+    <body style="background-color: #d5dbdb "> <!-- Background. Grey -->
+    
+        <title>MadcapLaughs Monitoring Log</title>
+
+        <b><p>Madcaplaughs Monitoring Log. Displaying last <u>{{ line_count }}</u> lines:</p></b>
+
+        <!-- Template. Loop over n amount of latest log lines and print -->
+        <p>
+            {% for line in log_print %}
+                {% if 'ERROR' in line %}
+                    <b><font color="#e74c3c">{{ line }}</font></b><br/> <!--Errors. Red -->
+                {% else %}
+                    <font color="#1c2833">{{ line }}</font><br/> <!-- Regular output. Black -->
+                {% endif %}
+            {% endfor %}
+        </p>
+
+    </body>
+</html>

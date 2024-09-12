@@ -41,12 +41,11 @@ def http_test(hostname,
         except exceptions.RequestException:
             return "OH NO! " + hostname + "." + domain + " has an unclear HTTP error, solar flares?: " + str(response.status_code)
 
-#--Wraps the above two functions, shouldn't this whole thing be a class?
-#def connection_tester(polling_interval, ip_hosts, ip_prefix, ip_enabled, http_hosts, http_domain, http_enabled):
+#--Wraps the above two functions, shouldn't this whole thing be a class? Revisit when you level up!
 def connection_tester(polling_interval,
                       ip_config,
                       http_config,
-                      mailer_config,
+                      alerter_config,
                       ):
 
     while True:
@@ -74,7 +73,6 @@ def connection_tester(polling_interval,
                 alerts.append(error)
 
         if not len(alerts) == 0:
-            log_writer(f"Raising Email Alert")
-            email_alerter(alerts, mailer_config)
+            email_alerter(alerts, alerter_config)
 
         sleep(polling_interval)
