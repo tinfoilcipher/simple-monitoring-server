@@ -1,0 +1,31 @@
+polling_interval: 30
+
+webserver:
+  ip: 0.0.0.0
+  port: 8081
+  event_count: 30
+
+alerting:
+  enabled: false
+  server: localhost
+  port: 25
+  recipient: unlucky_admin@yourdomain.com
+  sender: alerting@yourdomain.com
+
+logging:
+  file_path: /tmp/simple_monitor.log
+  level: DEBUG
+  stream_level: INFO
+
+subnets:
+  - 192.168.1.0/24
+  - 192.168.2.0/24
+
+ip:
+  hosts:
+    server1:
+      hostname: server1
+      ip_address: 10.0.0.25
+    server2:
+      hostname: server2
+      ip_address: 10.0.0.26

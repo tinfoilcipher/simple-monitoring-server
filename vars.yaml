@@ -1,71 +1,73 @@
 polling_interval: 30  #--Seconds
 
 webserver:
-  ip: "0.0.0.0"
-  port: "8081"
+  ip: 0.0.0.0
+  port: 8081
   event_count: 30 #--No of latest log events to print
 
 alerting:
   enabled: false
-  server: "localhost"
-  port: "25"
-  recipient: "andy@tinfoilcipher.co.uk"
-  sender: "alerting@tinfoilcipher.co.uk"
+  server: localhost
+  port: 25
+  recipient: andy@tinfoilcipher.co.uk
+  sender: alerting@tinfoilcipher.co.uk
+
+logging:
+  file_path: /tmp/mcl_monitor.log
+  level: DEBUG
+  stream_level: INFO #--Must be equal to or below main level
 
 ip:
-  enabled: true
-  prefix: "192.168.1."
+  #subnets:
   hosts:
     mcfw: 
-      hostname: "mcfw"
-      ip_host: "1"
+      hostname: mcfw
+      ip_address: 192.168.1.1
     mc-file:
-      hostname: "mc-file"
-      ip_host: "2"
+      hostname: mc-file
+      ip_address: 192.168.1.2
     mcnas:
-      hostname: "mcnas"
-      ip_host: "3"
+      hostname: mcnas
+      ip_address: 192.168.1.3
     mcsw01:
-      hostname: "mcsw01"
-      ip_host: "4"
+      hostname: mcsw01
+      ip_address: 192.168.1.4
     mcsw02:
-      hostname: "mcsw02"
-      ip_host: "5"
+      hostname: mcsw02
+      ip_address: 192.168.1.5
     mc-camera01:
       hostname: mc-camera01
-      ip_host: "16"
+      ip_address: 192.168.1.16
     mck8s-control01:
-      hostname: "mck8s-control01"
-      ip_host: "200"
+      hostname: mck8s-control01
+      ip_address: 192.168.1.200
     mck8s-worker01:
-      hostname: "mck8s-worker01"
-      ip_host: "210"
+      hostname: mck8s-worker01
+      ip_address: 192.168.1.210
     mck8s-worker02:
-      hostname: "mck8s-worker02"
-      ip_host: "211"
+      hostname: mck8s-worker02
+      ip_address: 192.168.1.211
     mck8s-worker03:
-      hostname: "mck8s-worker03"
-      ip_host: "212"
+      hostname: mck8s-worker03
+      ip_address: 192.168.1.212
     mc-host:
-      hostname: "mc-host"
-      ip_host: "254"
+      hostname: mc-host
+      ip_address: 192.168.1.254
 
 http:
-  enabled: true
-  domain: "madcaplaughs.co.uk"
   hosts:
     kubernetes:
-      hostname: "kubernetes"
+      hostname: kubernetes.madcaplaughs.co.uk
       endpoint: "/"
     frigate:
-      hostname: "frigate"
+      hostname: frigate.madcaplaughs.co.uk
       endpoint: "/"
     unifi:
-      hostname: "unifi"
+      hostname: unifi.madcaplaughs.co.uk
       endpoint: "/"
     deluge:
-      hostname: "deluge"
+      hostname: deluge.madcaplaughs.co.uk
       endpoint: "/"
     kodi-backend:
-      hostname: "kodi-backend"
+      hostname: kodi-backend.madcaplaughs.co.uk
       endpoint: "/"
