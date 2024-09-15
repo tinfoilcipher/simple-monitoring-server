@@ -1,0 +1,22 @@
+services: 
+  backend:
+    environment:
+      - VARFILE_PATH=${VARFILE_PATH}
+      - REQUESTS_CA_BUNDLE=${REQUESTS_CA_BUNDLE}
+    build: ./backend
+    volumes:
+      - /tmp:/tmp
+      - ./:/data
+      #--Uncomment below if using a private CA
+      #- /etc/ssl/certs:/etc/ssl/certs
+  
+  frontend:
+    environment:
+      - VARFILE_PATH=${VARFILE_PATH}
+    build:
+     context: frontend
+    volumes:
+      - /tmp:/tmp
+      - ./:/data
+    ports: 
+      - '8081:8081'

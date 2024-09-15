@@ -4,17 +4,31 @@ A simple monitoring tool that will periodically check for IP connectivity using 
 
 ## Running
 
-Configure variables in vars.yaml and run docker.
+### Docker
 
 ```bash
-#--Backend
-docker run -e REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt" -e VARFILE_PATH="/data/vars.yaml" -v /tmp:/tmp -v ${PWD}:/data -v /etc/ssl/certs:/etc/ssl/certs  monitor_backend:1
+export VARFILE_PATH="/data/vars.yaml"
+docker-compose up -f compose.yaml
+```
 
-#--Frontend
-docker run -e VARFILE_PATH="/data/vars.yaml" -v /tmp:/tmp -v ${PWD}:/data -p 8081:8081 monitor_frontend:1
+### Local Dev
+
+```bash
+export VARFILE_PATH="vars.yaml"
+python backend/src/app.py
+python frontend/src/app.py
 ```
 
 ## Input
+
+### Environment Variables
+
+| Variable            | Type      | Required | Description                                                                     |
+|---------------------|-----------|----------|---------------------------------------------------------------------------------|
+| VARFILE_PATH        | string    | Y        | Path to vars.yaml input file                                                    |
+| REQUESTS_CA_BUNDLE  | string    | N        | Path to private CA file. Needed if testing HTTP services signed by a private CA |
+
+### YAML Variables
 
 All input is via `vars.yaml`. Spec below:
 
@@ -38,3 +52,25 @@ All input is via `vars.yaml`. Spec below:
 ## Example Variable File Configuration
 
 - See [Configuration Examples](_example)
+
+## Use With a Private CA
+
+Before Python's requests library will trust your private CA it will first need to know about it's CA Certificate. Since disabling TLS validation is a bad thing to do, take a few seconds to do it properly. Assuming your OS already has your CA's certs installed...
+
+```bash
+export REQUESTS_CA_BUNDLE="/etc/ssl/certs/ca-certificates.crt"
+```
+
+This is the path for Ubuntu, locations differ on other distros and in Windows. This variable will inform the application where to look for your systems CA certs. Once this is set, add a line to the `compose.yaml` under `services.backend.environment.volumes` to mount your systems CA certs in to the application, I.E.:
+
+```yaml
+services: 
+  ...
+    volumes:
+      - /tmp:/tmp
+      - ./:/data
+      - /etc/ssl/certs:/etc/ssl/certs #--Add this line
+    ...
+```
+
+The app can then be launched as usual.
