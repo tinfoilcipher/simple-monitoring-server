@@ -18,7 +18,6 @@ docker run -e VARFILE_PATH="/data/vars.yaml" -v /tmp:/tmp -v ${PWD}:/data -p 808
 
 All input is via `vars.yaml`. Spec below:
 
-|-------------------------|------------------------------------------------------------------------------------|
 | Variable                | Type      | Required | Description                                                 |
 |-------------------------|-----------|----------|-------------------------------------------------------------|
 | polling_interval        | string    | Y        | Interval in seconds to run connectivity tests               |
