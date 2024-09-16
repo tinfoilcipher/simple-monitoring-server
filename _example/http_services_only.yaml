@@ -14,14 +14,11 @@ logging:
   stream_level: INFO
 
 monitors:
-  ip:
-    subnets:
-      - 192.168.1.0/24
-      - 10.0.0.0/24
+  http:
     hosts:
-      server1:
-        hostname: server1
-        ip_address: 10.0.0.25
-      server2:
-        hostname: server2
-        ip_address: 10.0.0.26
+      kubernetes:
+        hostname: kubernetes.yourdomain.com
+        endpoint: "/healthz"
+      netbox:
+        hostname: netbox.yourdomain.com
+        endpoint: "/healthz"

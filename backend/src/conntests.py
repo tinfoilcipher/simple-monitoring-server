@@ -26,60 +26,72 @@ def http_test(hostname,
     try:
         response.raise_for_status()
         return hostname + " is online: " + str(response.status_code)
-    except exceptions.HTTPError:
-        return hostname + " returned an HTTP error: " + str(response.status_code)
-    except exceptions.ConnectionError:
-        return hostname + " returned a connection error: " + str(response.status_code)
-    except exceptions.Timeout:
-        return hostname + " returned a timeout error: " + str(response.status_code)
-    except exceptions.RequestException:
-        return "OH NO! " + hostname + " has an unclear HTTP error, solar flares?: " + str(response.status_code)
+    except Exception as error:
+        return hostname + " returned an HTTP error: " + str(error) + ". Status Code: " + str(response.status_code)
 
 #--Wraps the above two functions, shouldn't this whole thing be a class? Revisit when you level up!
 def connection_tester(polling_interval,
-                      ip_config,
-                      http_config,
+                      monitor_config,
                       alerter_config,
                       logger_config
                       ):
+    
+    #--Strict variable Extraction, here be dragons
+    if "ip" in monitor_config.keys():
+        if "hosts" in monitor_config["ip"].keys():
+            ip_hosts = monitor_config["ip"]["hosts"]
+        else:
+            ip_hosts = None
+        if "subnets" in monitor_config["ip"].keys():
+            ip_subnets = monitor_config["ip"]["subnets"]
+        else:
+            ip_subnets = None
+    else:
+        ip_hosts = None
+        ip_subnets = None
 
+    if "http" in monitor_config.keys():
+        if "hosts" in monitor_config["http"].keys():
+            http_hosts = monitor_config["http"]["hosts"]
+        else:
+            http_hosts = None
+    else:
+        http_hosts = None
+
+    #--Main monitoring routine routines
     while True:
         responses = []
         alerts = []
         #--IP Subnet
-        try:
-            ip_config["subnets"]
-            for subnet in ip_config["subnets"]:
-                
+        if ip_subnets is not None:
+            for subnet in ip_subnets:
                 for ip in IPNetwork(subnet).iter_hosts():
                     ip = str(ip) #--Need to explicitly convert to a string to work with subprocess
                     response = ping_test("Remote Host", ip)
                     log_writer(response, logger_config)
                     responses.append(response)
-        except:
-            log_writer("ip.subnets Is Not Defined. Skipping Full Subnet Test.", logger_config)
+        else:
+            log_writer("No Subnets Defined. Skipping Subnet Checks", logger_config)
 
         #--IP Host Test
-        try:
-            ip_config["hosts"]
-            for key, value in ip_config["hosts"].items():
+        if ip_hosts is not None:
+            for key, value in ip_hosts.items():
                 response = ping_test(value["hostname"],
                                     value["ip_address"])
                 log_writer(response, logger_config)
                 responses.append(response)
-        except:
-            log_writer("ip.hosts Is Not Defined. Skipping Host Tests.", logger_config)
+        else:
+            log_writer("No IP Hosts Defined. Skipping IP Host Checks", logger_config)
 
         #--HTTP Host Test
-        try:
-            http_config["hosts"]
-            for key, value in http_config["hosts"].items():
+        if http_hosts is not None:
+            for key, value in http_hosts.items():
                 response = http_test(value["hostname"],
                                     value["endpoint"])
                 log_writer(response, logger_config)
                 responses.append(response)
-        except:
-            log_writer("http.hosts is Not Defined. Skipping Host Tests.", logger_config)
+        else:
+            log_writer("No HTTP Hosts Defined. Skipping IP Service Checks", logger_config)
 
         #--Send any outages to the alerter and loop
         for error in responses:
@@ -87,6 +99,5 @@ def connection_tester(polling_interval,
                 alerts.append(error)
 
         if not len(alerts) == 0:
-            email_alerter(alerts, alerter_config)
-
+            email_alerter(alerts, alerter_config, logger_config)
         sleep(polling_interval)

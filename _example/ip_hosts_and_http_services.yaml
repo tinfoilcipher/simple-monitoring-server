@@ -2,16 +2,16 @@ polling_interval: 3600 #--1 Hour
 frontend_count: 30
 
 alerting:
-  enabled: true
-  server: mailer
+  enabled: false
+  server: localhost
   port: 25
-  recipient: unlucky_admin@youdomain.com
+  recipient: unlucky_admin@yourdomain.com
   sender: alerting@yourdomain.com
 
 logging:
-  file_path: /tmp/simplemon.log
+  file_path: /tmp/simple_monitor.log
   level: DEBUG
-  stream_level: INFO #--Must be equal to or below main level
+  stream_level: INFO
 
 monitors:
   ip:
@@ -30,13 +30,10 @@ monitors:
         ip_address: 192.168.1.5
       ipcamera1:
         hostname: ipcamera1
-        ip_address: 192.168.1.30
-      firewall1: 
-        hostname: firewall1
+        ip_address: 192.168.1.16
+      firewall: 
+        hostname: firewall
         ip_address: 192.168.1.254
-      firewall2: 
-        hostname: firewall2
-        ip_address: 192.168.0.254
   http:
     hosts:
       kubernetes:
