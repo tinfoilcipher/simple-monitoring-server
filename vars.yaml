@@ -1,0 +1,47 @@
+polling_interval: 3600 #--1 Hour
+frontend_count: 30
+
+alerting:
+  enabled: true
+  server: mailer
+  port: 25
+  recipient: unlucky_admin@youdomain.com
+  sender: alerting@yourdomain.com
+
+logging:
+  file_path: /tmp/simplemon.log
+  level: DEBUG
+  stream_level: INFO #--Must be equal to or below main level
+
+monitors:
+  ip:
+    hosts:
+      server1:
+        hostname: server1
+        ip_address: 192.168.1.2
+      server2:
+        hostname: server2
+        ip_address: 192.168.1.3
+      switch1:
+        hostname: switch1
+        ip_address: 192.168.1.4
+      switch2:
+        hostname: switch2
+        ip_address: 192.168.1.5
+      ipcamera1:
+        hostname: ipcamera1
+        ip_address: 192.168.1.30
+      firewall1: 
+        hostname: firewall1
+        ip_address: 192.168.1.254
+      firewall2: 
+        hostname: firewall2
+        ip_address: 192.168.0.254
+  http:
+    hosts:
+      kubernetes:
+        hostname: kubernetes.yourdomain.com
+        endpoint: "/healthz"
+      netbox:
+        hostname: netbox.yourdomain.com
+        endpoint: "/healthz"
