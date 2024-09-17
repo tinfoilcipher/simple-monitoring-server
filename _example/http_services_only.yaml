@@ -1,0 +1,24 @@
+polling_interval: 3600 #--1 Hour
+frontend_count: 30
+
+alerting:
+  enabled: true
+  server: localhost
+  port: 25
+  recipient: unlucky_admin@fictional-domain.com
+  sender: alerting@fictional-domain.com
+
+logging:
+  file_path: /tmp/simplemon.log
+  level: DEBUG
+  stream_level: INFO
+
+monitors:
+  http:
+    hosts:
+      kubernetes:
+        hostname: kubernetes.fictional-domain.com
+        endpoint: "/healthz"
+      netbox:
+        hostname: netbox.fictional-domain.com
+        endpoint: "/healthz"

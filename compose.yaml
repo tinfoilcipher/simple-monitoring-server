@@ -1,0 +1,42 @@
+version: '3'
+services:
+  mailer:
+    image: bytemark/smtp #--https://github.com/BytemarkHosting/docker-smtp
+    restart: always
+
+  backend:
+    depends_on:
+      - mailer
+    environment:
+      - VARFILE_PATH=${VARFILE_PATH}
+      - REQUESTS_CA_BUNDLE=${REQUESTS_CA_BUNDLE}
+    build: ./backend
+    volumes:
+      - /tmp:/tmp
+      - ./:/data
+      #--Uncomment below if monitoring endpoints signed by a private CA
+      #- /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
+  
+  frontend:
+    depends_on:
+      - backend
+    environment:
+      - VARFILE_PATH=${VARFILE_PATH}
+    build:
+     context: frontend
+    volumes:
+      - /tmp:/tmp
+      - ./:/data
+    ports: 
+      - '8081'
+
+  proxy:
+    depends_on:
+      - frontend
+    image: nginx
+    environment:
+      - NGINX_HOST=${SERVER_HOSTNAME}
+    ports:
+      - "80:80"
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
