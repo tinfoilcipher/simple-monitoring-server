@@ -2,14 +2,14 @@ polling_interval: 3600 #--1 Hour
 frontend_count: 30
 
 alerting:
-  enabled: false
+  enabled: true
   server: localhost
   port: 25
-  recipient: unlucky_admin@yourdomain.com
-  sender: alerting@yourdomain.com
+  recipient: unlucky_admin@fictional-domain.com
+  sender: alerting@fictional-domain.com
 
 logging:
-  file_path: /tmp/simple_monitor.log
+  file_path: /tmp/simplemon.log
   level: DEBUG
   stream_level: INFO
 

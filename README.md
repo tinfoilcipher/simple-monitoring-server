@@ -1,6 +1,6 @@
 # Simple Monitoring Tool
 
-A simple monitoring tool that will periodically check for IP connectivity using ICMP (ping) and HTTP connectivity to web services using Python's requests library. Logs are printed to a simple web page and alerts are sent to a named email address via SMTP. This application is designed to be as straight forward as possible and provide basic monitoring functionality to a very small office or homelab where the costs of setting up a large monitoring infrastructure are too high or otherwise not attractive.
+A simple monitoring tool that will periodically check for IP connectivity using ICMP (ping) and HTTP connectivity to web services using Python's requests library. Logs are printed to a basic web page and alerts are sent to a named email address via SMTP. This application is designed to be as straight forward as possible and provide basic monitoring functionality to a very small office or homelab where the costs of setting up a large monitoring infrastructure are too high or too time consuming.
 
 ## Running
 
@@ -8,7 +8,7 @@ A simple monitoring tool that will periodically check for IP connectivity using 
 
 ```bash
 export VARFILE_PATH="/data/vars.yaml"
-export SERVER_HOSTNAME="monitoring.mydomain.com"
+export SERVER_HOSTNAME="monitoring.fictional-domain.com"
 docker-compose up -f compose.yaml
 ```
 
@@ -120,4 +120,4 @@ server {
   ...
 ```
 
-Ensure to `export SERVER_HOSTNAME=myserver.domain.com` before running the application. The server should be acessible at `https://$SERVER_HOSTNAME` on launch.
+Ensure to `export SERVER_HOSTNAME` to the same name on your certificate before running the application. The server should be acessible at `https://$SERVER_HOSTNAME` on launch.
