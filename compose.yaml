@@ -1,7 +1,6 @@
-version: '3'
 services:
   mailer:
-    image: bytemark/smtp #--https://github.com/BytemarkHosting/docker-smtp
+    image: bytemark/smtp:stretch #--https://github.com/BytemarkHosting/docker-smtp
     restart: always
 
   backend:
@@ -16,6 +15,7 @@ services:
       - ./:/data
       #--Uncomment below if monitoring endpoints signed by a private CA
       #- /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
+    restart: always
   
   frontend:
     depends_on:
@@ -29,14 +29,16 @@ services:
       - ./:/data
     ports: 
       - '8081'
+    restart: always
 
   proxy:
     depends_on:
       - frontend
-    image: nginx
+    image: nginx:1.27.1-alpine-slim
     environment:
       - NGINX_HOST=${SERVER_HOSTNAME}
     ports:
       - "80:80"
     volumes:
       - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    restart: always
