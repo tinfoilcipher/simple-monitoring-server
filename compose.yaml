@@ -16,7 +16,7 @@ services:
       #--Uncomment below if monitoring endpoints signed by a private CA
       #- /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
     restart: always
-  
+
   frontend:
     depends_on:
       - backend

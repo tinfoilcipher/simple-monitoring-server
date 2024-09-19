@@ -1,11 +1,19 @@
+"""Constructs logger and writes application logs"""
+
 import logging
 import logging.handlers
-from os import environ
 from sys import stdout
-from datetime import datetime
 
 def log_builder(config):
+    """Builds and configures multipe log streams
     
+    Parameters:
+        config (dict): Logger configuration
+    
+    Returns:
+        logger (obj): Constructed Logger
+    """
+
     #--Root Logger
     logger = logging.getLogger()
     logger.setLevel(config["level"])
@@ -25,13 +33,22 @@ def log_builder(config):
     stream_handler.setFormatter(formatter)
 
     #--Ensure we don't make an infinite amount of handlers
-    if not len(logger.handlers):
+    if not logger.handlers:
         logger.addHandler(file_handler)
         logger.addHandler(stream_handler)
 
     return logger
-    
+
 def log_writer(logline, config):
+    """Writes events to application log
+    
+    Parameters:
+        logline (str): Line to write to log. Severity is determined by the contents of this string
+        config (dict): Logger configuration
+
+    Returns:
+        logger (obj): Constructed Logger
+    """
     logger = log_builder(config)
     #--Catch all offlines as ERRORs
     if "offline" in logline:
