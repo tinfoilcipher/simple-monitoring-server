@@ -1,33 +1,58 @@
+"""Runs connection tests via IP (ping) or HTTP (requests)"""
+
 import subprocess
-from sys import stdout
-from contextlib import redirect_stdout
-from netaddr import IPNetwork
-from requests import get, exceptions
 from time import sleep
+from netaddr import IPNetwork
+from requests import get
 from logger import log_writer
 from alerter import email_alerter
 
 #--Ping Testing
 def ping_test(hostname,
               ip):
+    """Sends a ping to a specific IP address and returns online/offline status
+    
+    Parameters:
+        hostname (str): Hostname of IP being tested. For display and logging purposes only
+        ip (str): IP address to test
+    
+    Returns:
+        result (str): Results of connectivity test
+    """
 
     try:
-        #--Catch the results of a ping. The stderr modification is needed to supress legit errors on the console so they don't noisy things up on a dead host
+        #--Catch the results of a ping. The stderr modification is needed to supress legit errors on
+        #--the console so they don't noisy things up on a dead host
         subprocess.check_output(["ping", "-c", "1", ip], stderr=subprocess.STDOUT)
-        return hostname + " (" + ip + ") is online"
+        result = hostname + " (" + ip + ") is online"
+        return result
     except subprocess.CalledProcessError:
-        return hostname + " (" + ip + ") is offline or unreachable"
+        result = hostname + " (" + ip + ") is offline or unreachable"
+        return result
 
 #--HTTP Request Testing
-def http_test(hostname,
+def http_test(protocol,
+              hostname,
               endpoint):
+    """Sends a ping to a specific IP address and returns online/offline status
+    
+    Parameters:
+        protocol (str): http or https
+        hostname (str): Hostname of HTTP service being tested
+        endpoint (str): HTTP suffix of service being tested
+    
+    Returns:
+        result (str): Results of connectivity test
+    """
 
-    response = get('https://' + hostname + "." + endpoint)
+    response = get(protocol + '://' + hostname + "." + endpoint)
     try:
         response.raise_for_status()
-        return hostname + " is online: " + str(response.status_code)
+        result = hostname + " is online: " + str(response.status_code)
+        return result
     except Exception as error:
-        return hostname + " returned an HTTP error: " + str(error) + ". Status Code: " + str(response.status_code)
+        result = hostname + " returned HTTP error: " + str(error) + "." + str(response.status_code)
+        return result
 
 #--Wraps the above two functions, shouldn't this whole thing be a class? Revisit when you level up!
 def connection_tester(polling_interval,
@@ -35,7 +60,18 @@ def connection_tester(polling_interval,
                       alerter_config,
                       logger_config
                       ):
+    """Performs both IP and HTTP connectivity tests
     
+    Parameters:
+        polling_interval (int): Interval in seconds to repeat connectivity tests
+        monitor_config (dict): Full monitoring configuration for all IP and HTTP hosts
+        alerter_config (dict): Alerter configuration. See email_alerter.__doc__
+        logger_config (dict): Logger configuration. See log_writer.__doc__
+    
+    Returns:
+        result (str): Results of connectivity test
+    """
+
     #--Strict variable Extraction, here be dragons
     if "ip" in monitor_config.keys():
         if "hosts" in monitor_config["ip"].keys():
@@ -86,7 +122,8 @@ def connection_tester(polling_interval,
         #--HTTP Host Test
         if http_hosts is not None:
             for key, value in http_hosts.items():
-                response = http_test(value["hostname"],
+                response = http_test(value["protocol"],
+                                    value["hostname"],
                                     value["endpoint"])
                 log_writer(response, logger_config)
                 responses.append(response)
@@ -98,6 +135,6 @@ def connection_tester(polling_interval,
             if "online" not in error:
                 alerts.append(error)
 
-        if not len(alerts) == 0:
+        if len(alerts) != 0:
             email_alerter(alerts, alerter_config, logger_config)
         sleep(polling_interval)

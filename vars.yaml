@@ -40,8 +40,10 @@ monitors:
   http:
     hosts:
       kubernetes:
-        hostname: kubernetes.fictional-domain.com
-        endpoint: "/healthz"
+        protocol: https
+        hostname: "kubernetes.fictional-domain.com"
+        endpoint: "/health"
       netbox:
-        hostname: netbox.fictional-domain.com
-        endpoint: "/healthz"
+        protocol: https
+        hostname: "netbox.fictional-domain.com"
+        endpoint: "/health"
