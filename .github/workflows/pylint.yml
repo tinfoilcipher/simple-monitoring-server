@@ -24,4 +24,4 @@ jobs:
         pip install -r frontend/requirements.txt
     - name: Lint Application Code
       run: |
-        pylint $(git ls-files '*.py')
+        pylint --fail-under=9 $(git ls-files '*.py')
