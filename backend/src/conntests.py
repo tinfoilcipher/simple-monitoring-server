@@ -13,8 +13,7 @@ def ping_test(hostname,
     """Sends a ping to a specific IP address and returns online/offline status
     
     Parameters:
-        hostname (str): Hostname of IP being tested. For display and logging purposes only
-        ip (str): IP address to test
+        ip (str): IP address to test connectivity to
     
     Returns:
         result (str): Results of connectivity test
@@ -33,25 +32,28 @@ def ping_test(hostname,
 #--HTTP Request Testing
 def http_test(protocol,
               hostname,
+              domain,
               endpoint):
     """Sends a ping to a specific IP address and returns online/offline status
     
     Parameters:
-        protocol (str): http or https
-        hostname (str): Hostname of HTTP service being tested
+        protocol (str): Protocol of HTTP service being tested, http or https
+        hostname (str): Hostname of HTTP service being tested, used with domain to create FQDN
+        domain (str): Domain on HTTP service being tested, used with hostname to create FQDN
         endpoint (str): HTTP suffix of service being tested
     
     Returns:
         result (str): Results of connectivity test
     """
 
-    response = get(protocol + '://' + hostname + "." + endpoint)
+    target = protocol + '://' + hostname + "." + domain + endpoint
+    response = get(target)
     try:
         response.raise_for_status()
-        result = hostname + " is online: " + str(response.status_code)
+        result = target + " is online: " + str(response.status_code)
         return result
     except Exception as error:
-        result = hostname + " returned HTTP error: " + str(error) + "." + str(response.status_code)
+        result = target + " returned HTTP error: " + str(error) + "." + str(response.status_code)
         return result
 
 #--Wraps the above two functions, shouldn't this whole thing be a class? Revisit when you level up!
@@ -112,7 +114,7 @@ def connection_tester(polling_interval,
         #--IP Host Test
         if ip_hosts is not None:
             for key, value in ip_hosts.items():
-                response = ping_test(value["hostname"],
+                response = ping_test(key,
                                     value["ip_address"])
                 log_writer(response, logger_config)
                 responses.append(response)
@@ -123,7 +125,8 @@ def connection_tester(polling_interval,
         if http_hosts is not None:
             for key, value in http_hosts.items():
                 response = http_test(value["protocol"],
-                                    value["hostname"],
+                                    key,
+                                    value["domain"],
                                     value["endpoint"])
                 log_writer(response, logger_config)
                 responses.append(response)

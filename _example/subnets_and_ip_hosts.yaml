@@ -20,8 +20,6 @@ monitors:
       - 10.0.0.0/24
     hosts:
       server1:
-        hostname: server1
         ip_address: 10.0.0.25
       server2:
-        hostname: server2
         ip_address: 10.0.0.26
